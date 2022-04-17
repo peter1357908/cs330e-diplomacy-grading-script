@@ -1,3 +1,11 @@
+How to run:
+
+0. go to the same folder as the `makefile`
+1. download the group JSON submissions from Canvas and save them in `group_JSON_submissions`
+2. download the evaluation JSON submissions from Canvas and save them in `evaluation_JSON_submissions`
+3. in the same directory, run `make`
+4. you can simply `make` again after any update to the submissions files
+
 modified from cs330e-collatz-grading-script:
 
 https://github.com/peter1357908/cs330e-collatz-grading-script/

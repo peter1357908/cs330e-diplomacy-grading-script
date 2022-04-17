@@ -112,8 +112,8 @@ def check_SHA(gitlab_username):
 	sha = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip()
 	submitted_sha = data['Git SHA']
 	if sha != submitted_sha:
-		print(f'Submitted Git SHA does not match repo SHA for gitlab_username {gitlab_username}')
-		emails[gitlab_username]['contents'] += 'Submitted SHA in json does not match repo SHA\n'
+		print(f'Submitted Git SHA does not match the private code repo\'s SHA for the latest commit for gitlab_username {gitlab_username}')
+		emails[gitlab_username]['contents'] += 'Submitted Git SHA does not match the private code repo\'s SHA for the latest commit\n'
 
 # check all required files are present in private code repo
 def check_required_files(gitlab_username):
