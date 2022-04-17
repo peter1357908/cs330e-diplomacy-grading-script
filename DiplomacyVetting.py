@@ -53,6 +53,9 @@ group_json_files = glob.glob(group_submissions_path)
 num_files = len(group_json_files)
 for i in range(num_files):
 	filename = group_json_files[i]
+	if filename[-12:] == '.schema.json':
+		# ignore schema JSON files
+		continue
 	print(f'====================================\ncurrently checking group JSON file {filename} and cloning repository\nfile {i+1} out of {num_files} files')
 	with open(filename, 'r') as f:
 		try:
@@ -68,7 +71,7 @@ for i in range(num_files):
 				'contents': ''
 			}
 		except Exception as e:
-			print(f'Invalid json for{filename}')
+			print(f'Invalid json for {filename}')
 			with open(f'{output_path}/invalidGroupJson.txt', 'a') as f:
 				f.write(f'{filename} is a invalid json file\n{e}\n')
 			continue
@@ -88,10 +91,11 @@ for i in range(num_files):
 		except:
 			try:
 				clone_url = 'git@gitlab.com:' + gitlab_username + '/diplomacy.git'
-				subprocess.run(['git', 'clone', clone_url, gitlab_username], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+				subprocess.run(['git', 'clone', clone_url, gitlab_username], capture_output=True, check=True)
 			except Exception as e:
-				if 'already exists' not in str(e): 
-					emails[gitlab_username]['contents'] += 'Repo ' + clone_url + ' not found, possibly due to forgetting to invite the grader as a maintainer\n'
+				stderr_string = e.stderr.decode("utf-8")
+				if 'already exists' not in stderr_string:
+					emails[gitlab_username]['contents'] += f'Error while trying to clone from repo {clone_url}:\n{stderr_string}\nPossible causes: forgetting to invite graders as maintainers, giving the incorrect GitLab username, etc.\n'
 		
 		submissions[gitlab_username] = data
 		chdir('..')
@@ -254,6 +258,6 @@ for email in emails.values():
 		r.write(f'{target_name} ({email["eid_1"]} and {email["eid_2"]}) requested to resubmit\n')
 	with open('email_output.txt', 'a') as o:
 		o.write(f'{email["email_1"]}; {email["email_2"]}\n')
-		o.write(f'Hello {target_name},\n\nBased on our vetting script, you had the following errors in your Collatz submission:\n\n{email["contents"]}\n\nYou may resubmit your project with additional late penalty counting from when you received this email. If you do not resubmit, we will grade your existing submission without additional late penalty. If you decide to resubmit, please reply to this email after you finish resubmitting.\n\nPlease let me know if there is any mistake in the vetting script\'s output.\n\nThanks,\nPeter\n\n')
+		o.write(f'Hello {target_name},\n\nBased on our vetting script, you had the following errors in your {project_basename} submission:\n\n{email["contents"]}\n\nYou may resubmit your project with additional late penalty counting from when the Piazza announcement becomes published (please check the Piazza announcement for details). If you do not resubmit, we will grade your existing submission without additional late penalty. If you decide to resubmit, please reply to this email after you finish resubmitting.\n\nPlease let me know if there is any mistake in the vetting script\'s output.\n\nThanks,\nPeter\n\n')
 chdir(base_path)
 

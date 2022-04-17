@@ -43,7 +43,7 @@ for i in range(num_files):
 			target_student_name = f'{data["Member #2 First Name"]} {data["Member #2 Last Name"]}'
 			
 		except Exception as e:
-			print(f'Invalid json for{filename}')
+			print(f'Invalid json for {filename}')
 			with open(f'{output_path}/invalidEvaluationJson.txt', 'a') as f:
 				f.write(f'{filename} is a invalid json file\n{e}\n')
 			continue
