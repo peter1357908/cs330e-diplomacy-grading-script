@@ -113,7 +113,7 @@ def check_SHA(gitlab_username):
 	submitted_sha = data['Git SHA']
 	if sha != submitted_sha:
 		print(f'Submitted Git SHA does not match the private code repo\'s SHA for the latest commit for gitlab_username {gitlab_username}')
-		emails[gitlab_username]['contents'] += 'Submitted Git SHA does not match the private code repo\'s SHA for the latest commit\n'
+		emails[gitlab_username]['contents'] += f'Submitted Git SHA ({submitted_sha}) does not match the private code repo\'s SHA for the latest commit ({sha})\n'
 
 # check all required files are present in private code repo
 def check_required_files(gitlab_username):
@@ -183,7 +183,10 @@ def runOurAcceptanceTests(gitlab_username):
 			
 			# strip() to account for students outputting extra newlines in the end
 			if output.strip() != acceptance_test_outputs[i-1]:
-				# print(f'Grader acceptance test {i} failed\n====\nreceived output:\n====\n{output}\n====\nintended output:\n====\n{acceptance_test_outputs[i-1]}\n====')
+				# comment the following out as to NOT produce diff_message during vetting,
+				# since the grader acceptance tests should remain hidden
+				diff_message = f'Grader acceptance test {i} failed\n====\nreceived output:\n====\n{output}\n====\nintended output:\n====\n{acceptance_test_outputs[i-1]}\n====\n'
+				emails[gitlab_username]['contents'] += diff_message
 				emails[gitlab_username]['contents'] += f'Grader acceptance test {i} failed (incorrect output)\n'
 				num_failed_acceptanceTests += 1
 		except subprocess.TimeoutExpired as e:
