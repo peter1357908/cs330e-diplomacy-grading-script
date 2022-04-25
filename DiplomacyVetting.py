@@ -130,8 +130,10 @@ def check_required_files(gitlab_username):
 # 2. count the number of unit tests to make sure that there are enough
 def checkUnitTests(gitlab_username):
 	if 'makefile' not in glob.glob('makefile'):
+		emails[gitlab_username]['contents'] += 'because `makefile` is missing, unit tests were not checked'
 		return
 	if test_py_file not in glob.glob(test_py_file):
+		emails[gitlab_username]['contents'] += f'because `{test_py_file}` is missing, unit tests were not checked'
 		return
 
 	# run unit tests
@@ -154,9 +156,11 @@ def checkUnitTests(gitlab_username):
 acceptance_test_timeout = 20
 def checkSubmittedAcceptanceTests(gitlab_username):
 	if run_py_file not in glob.glob(run_py_file):
+		emails[gitlab_username]['contents'] += f'because `{run_py_file}` is missing, acceptance tests were not checked'
 		return
 	for filename in acceptance_test_filenames:
 		if filename not in glob.glob(filename):
+			emails[gitlab_username]['contents'] += f'because `{filename}` is missing, acceptance tests were not checked'
 			return
 	
 	for i in range(1, num_acceptance_tests + 1):
@@ -174,6 +178,7 @@ def checkSubmittedAcceptanceTests(gitlab_username):
 # run our own acceptance tests
 def runOurAcceptanceTests(gitlab_username):
 	if run_py_file not in glob.glob(run_py_file):
+		emails[gitlab_username]['contents'] += f'because `{run_py_file}` is missing, acceptance tests were not checked'
 		return
 	
 	num_failed_acceptanceTests = 0
