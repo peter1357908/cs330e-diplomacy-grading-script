@@ -13,6 +13,8 @@ Uncomment the lines involving `diff_message` in `DiplomacyVetting.py` for easier
 
 ## other notes
 
+Make sure to read `TODO.md` for features that are yet implemented; some quirks of the script can be explained by the lack of certain features
+
 modified from cs330e-collatz-grading-script:
 
 https://github.com/peter1357908/cs330e-collatz-grading-script/
