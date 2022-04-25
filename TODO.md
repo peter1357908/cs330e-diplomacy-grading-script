@@ -10,3 +10,4 @@ Easy Change:
 Challenging Change:
 - Make the code more efficient (run tests in parallel and keep files open instead of repeatedly opening and closing them)
 - Send emails automatically
+- check if each major function has documentation (try using pydoc somehow?)
